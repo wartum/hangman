@@ -26,13 +26,14 @@ fn play (phrase: &String) -> bool {
         let passed = check_letter(letter, &phrase, &mut masked_phrase);
         if passed == false {
             chances -= 1;
-            if chances == 0 {
-                break false;
-            }
-        } else {
-            if masked_phrase.find("_") == None {
-                break true;
-            }
+        }
+        
+        if chances == 0 {
+            break false;
+        }
+
+        if masked_phrase.find("_") == None {
+            break true;
         }
     };
     clearscreen::clear().unwrap();
