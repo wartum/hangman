@@ -3,7 +3,7 @@ use rand::Rng;
 fn main() {
     let phrase = pick_phrase();
     let win = play(&phrase);
-    
+
     if win {
         println!("You won!, the phrase was \"{}\"", phrase);
     } else {
@@ -16,7 +16,7 @@ fn play (phrase: &String) -> bool {
     clearscreen::clear().unwrap();
     let mut masked_phrase = get_masked_phrase(&phrase);
     let mut chances: u8 = 10;
-    
+
     let win = loop {
         println!("\"{}\"", masked_phrase);
         draw_hangman(chances);
@@ -27,7 +27,7 @@ fn play (phrase: &String) -> bool {
         if passed == false {
             chances -= 1;
         }
-        
+
         if chances == 0 {
             break false;
         }
@@ -42,33 +42,24 @@ fn play (phrase: &String) -> bool {
 
 fn draw_hangman(chances: u8) {
     println!("chances left: {}", chances);
-    if chances == 10 {
-        println!("\n\n\n\n\n\n\n");
-    } else if chances == 9 {
-        println!("\n|\n|\n|\n|\n|\n|\n");
-    } else if chances == 8 {
-        println!("______________\n|\n|\n|\n|\n|\n|\n");
-    } else if chances == 7 {
-        println!("______________\n|/\n|\n|\n|\n|\n|\n");
-    } else if chances == 6 {
-        println!("______________\n|/     |\n|\n|\n|\n|\n|\n");
-    } else if chances == 5 {
-        println!("______________\n|/     |\n|      O\n|\n|\n|\n|\n");
-    } else if chances == 4 {
-        println!("______________\n|/     |\n|      O\n|      |\n|      |\n|\n|\n");
-    } else if chances == 3 {
-        println!("______________\n|/     |\n|      O\n|      |\n|      |\n|     /\n|\n");
-    } else if chances == 2 {
-        println!("______________\n|/     |\n|      O\n|      |\n|      |\n|     / \\\n|\n");
-    } else if chances == 1 {
-        println!("______________\n|/     |\n|      O\n|     /|\n|      |\n|     / \\\n|\n");
-    } else if chances == 0 {
-        println!("______________\n|/     |\n|      O\n|     /|\\\n|      |\n|     / \\\n|\n");
+    match chances {
+        10 => println!("\n\n\n\n\n\n\n"),
+        9  => println!("\n|\n|\n|\n|\n|\n|\n"),
+        8  => println!("______________\n|\n|\n|\n|\n|\n|\n"),
+        7  => println!("______________\n|/\n|\n|\n|\n|\n|\n"),
+        6  => println!("______________\n|/     |\n|\n|\n|\n|\n|\n"),
+        5  => println!("______________\n|/     |\n|      O\n|\n|\n|\n|\n"),
+        4  => println!("______________\n|/     |\n|      O\n|      |\n|      |\n|\n|\n"),
+        3  => println!("______________\n|/     |\n|      O\n|      |\n|      |\n|     /\n|\n"),
+        2  => println!("______________\n|/     |\n|      O\n|      |\n|      |\n|     / \\\n|\n"),
+        1  => println!("______________\n|/     |\n|      O\n|     /|\n|      |\n|     / \\\n|\n"),
+        0  => println!("______________\n|/     |\n|      O\n|     /|\\\n|      |\n|     / \\\n|\n"),
+        _  => return
     }
 }
 
 fn check_letter(letter: char, phrase: &String, masked_phrase: &mut String) -> bool {
-    let mut pass: bool = false;
+    let mut pass = false;
     for (i, c) in phrase.chars().enumerate() {
         if c == letter {
             pass = true;
@@ -91,13 +82,23 @@ fn get_letter() -> char {
     let mut size = 0;
     while size < 2 {
         println!("\nPick a letter");
-        size = std::io::stdin().read_line(&mut buff).expect("Cannot read from stdin");
+        size = std::io::stdin()
+            .read_line(&mut buff)
+            .expect("Cannot read from stdin");
     }
     return buff.chars().nth(0).unwrap();
 }
 
 fn pick_phrase() -> String {
-    let words = ["apple", "orange", "church", "table", "chair", "car"];
+    let words = [
+        "apple",
+        "orange",
+        "church",
+        "table",
+        "chair",
+        "car"
+    ];
     let phrase = words[rand::thread_rng().gen_range(0..words.len())];
     return String::from(phrase);
 }
+
