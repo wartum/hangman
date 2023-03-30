@@ -79,12 +79,20 @@ fn get_masked_phrase(phrase: &String) -> String {
 
 fn get_letter() -> char {
     let mut buff = String::new();
-    let mut size = 0;
-    while size < 2 {
-        println!("\nPick a letter");
-        size = std::io::stdin()
+    println!("\nPick a letter");
+    loop {
+        std::io::stdin()
             .read_line(&mut buff)
             .expect("Cannot read from stdin");
+        let c = buff.chars().nth(0).unwrap();
+        if !c.is_alphabetic() {
+            println!("Pick only alphabetic characters");
+            buff.clear();
+            continue;
+        }
+        else {
+            break;
+        }
     }
     return buff.chars().nth(0).unwrap();
 }
